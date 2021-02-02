@@ -66,7 +66,8 @@ def _convert_to_mp3(args, history):
             continue
         in_file = item.target_file
         out_file = item.target_file[:-5] + ".mp3"
-        res = subprocess.run([ffmpeg_exe, "-i", in_file, "-vn", "-ab", str(item.abr) + "k", "-y", out_file])
+        res = subprocess.run(
+            [ffmpeg_exe, "-i", in_file, "-vn", "-ab", str(item.abr) + "k", "-loglevel", "warning", "-y", out_file])
         if res.returncode == 0:
             os.remove(in_file)
 
@@ -84,24 +85,5 @@ def main():
         _save_history(args, history)
 
 
-class OBJ(object):
-    pass
-
-
-def demo():
-    args = OBJ()
-    args.ffmpeg_path = "C:\\Program Files\\net.downloadhelper.coapp\\converter\\build\\win\\64\\ffmpeg.exe"
-    item = OBJ()
-    item.abr = 160
-    item.target_file = "R:\TEMP\\Avril Lavigne - I Will Be.webm"
-    item.status = "downloaded"
-    history = {
-        "a": item
-    }
-
-    _convert_to_mp3(args, history)
-
-
 if __name__ == "__main__":
     main()
-    # demo()
