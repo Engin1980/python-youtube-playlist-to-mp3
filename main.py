@@ -36,11 +36,8 @@ def _read_arguments():
 
 
 def _load_history(args):
-    if args.dont_load_history:
-        ret = {}
-    else:
-        full_history_file_name = os.path.join(args.output_path, args.history_filename)
-        ret = track_history.try_load_track_history(full_history_file_name)
+    full_history_file_name = os.path.join(args.output_path, args.history_filename)
+    ret = track_history.try_load_track_history(full_history_file_name)
     return ret
 
 
@@ -53,7 +50,7 @@ def _save_history(args, history):
 
 
 def _merge_history(old, new):
-    ret = []
+    ret = {}
     for key in old:
         ret[key] = old[key]
     for key in new:
@@ -76,7 +73,7 @@ def _convert_to_mp3(args, history):
 
 def main():
     args = _read_arguments()
-    history_old = {} if not args.dont_load_history else _load_history(args)
+    history_old = {} if args.dont_load_history else _load_history(args)
     history_new = download(args.url, args.output_path, history_old, delay_between_tracks=args.delay, verbose=True)
 
     if args.to_mp3:
