@@ -53,7 +53,7 @@ main.py [-h] [--dont-load-history] [--dont-save-history]
                url output-path
 ```
 
-Simple usage from command line:
+Simple usage from the command line:
 ```shell
 python main.py https://www.youtube.com/playlist?list=ACF5.... C:/TEMP
 ```
@@ -61,16 +61,16 @@ python main.py https://www.youtube.com/playlist?list=ACF5.... C:/TEMP
 There are command line arguments available (note `url` and `output-path` are mandatory positional arguments):
 
 
-| Parameter | Meaning | Mand./Def. |
+| Parameter | Meaning | Value |
 | --------- | ------- | ---------- |
-| url       | The URL of the input YouTube playlist, e.g. `https://www.youtube.com/playlist?list=OLAK5...` | (Must be provided.) |
-| output&#8209;path | The output path (absolute or relative) where the result will be stored. | (Must be provided.) |
-| &#8209;&#8209;dont&#8209;load&#8209;history | If set, the previously downloaded tracks will be downloaded again. | History loaded by default |
-| &#8209;&#8209;dont&#8209;save&#8209;history | If set, the list of downloaded tracks will not be saved for future history use. | History saved by default |
-| &#8209;&#8209;history&#8209;filename | Sets the custom history filename, if required. May be absolute or relative. If relative, the file is stored in the output path. | If not set, default name is used. |
-| &#8209;&#8209;delay | Sets the gap (sleep interval) in seconds between download end/start (to not overhaul YouTube server). | Default value is 10 |
-| &#8209;&#8209;to&#8209;mp3 | If set, the program will convert downloaded `*.webm` files into `*.mp3` files using FFMPEG. If the conversion is successful, the `*.webm` files are deleted. | Conversion is not done by default. |
-| &#8209;&#8209;ffmpeg&#8209;path | Location (absolute or relative) to `ffmpeg.exe` file. If not set, the `PATH` environment variable is used to detect the file location. If the file is not found, the script will crash. | Use `PATH` environment variable by default.
+| url       | The URL of the input YouTube playlist, e.g. `https://www.youtube.com/playlist?list=OLAK5...` | Mandatory. |
+| output&#8209;path | The output path (absolute or relative) where the result will be stored. | Mandatory. |
+| &#8209;&#8209;dont&#8209;load&#8209;history | If set, the previously downloaded tracks will be downloaded again. | Optional. If not set, history is loaded by default. |
+| &#8209;&#8209;dont&#8209;save&#8209;history | If set, the list of downloaded tracks will not be saved for future history use. | Optional. If not set, history is saved by default. |
+| &#8209;&#8209;history&#8209;filename | Sets the custom history filename, if required. May be absolute or relative. If relative, the file is stored in the output path. | Optional. If not set, default name is used. |
+| &#8209;&#8209;delay | Sets the gap (sleep interval) in seconds between download end/start (to not overhaul YouTube server). | Optional. Default value is 10. |
+| &#8209;&#8209;to&#8209;mp3 | If set, the program will convert downloaded `*.webm` files into `*.mp3` files using FFMPEG. If the conversion is successful, the `*.webm` files are deleted. | Optional. Conversion is not done by default. |
+| &#8209;&#8209;ffmpeg&#8209;path | Location (absolute or relative) to `ffmpeg.exe` file. If not set, the `PATH` environment variable is used to detect the file location. If the file is not found, the script will crash. | Optional. Uses `PATH` environment variable by default.
 
 More complex usage:
 
