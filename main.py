@@ -77,7 +77,7 @@ def _convert_to_mp3(args, history):
 def main():
     args = _read_arguments()
     history_old = {} if not args.dont_load_history else _load_history(args)
-    history_new = download(args.url, args.output_path, history_old, verbose=True)
+    history_new = download(args.url, args.output_path, history_old, delay_between_tracks=args.delay, verbose=True)
 
     if args.to_mp3:
         _convert_to_mp3(args, history_new)
