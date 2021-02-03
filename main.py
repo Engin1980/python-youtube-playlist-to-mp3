@@ -58,18 +58,26 @@ def _merge_history(old, new):
     return ret
 
 
-def _convert_to_mp3(args, history):
+def _convert_files_to_mp3(args, history):
     ffmpeg_exe = "ffmpeg.exe" if args.ffmpeg_path is None else args.ffmpeg_path
     for key in history.keys():
         item = history[key]
-        if item.status != "downloaded":
-            continue
-        in_file = item.target_file
-        out_file = item.target_file[:-5] + ".mp3"
-        res = subprocess.run(
-            [ffmpeg_exe, "-i", in_file, "-vn", "-ab", str(item.abr) + "k", "-loglevel", "warning", "-y", out_file])
-        if res.returncode == 0:
-            os.remove(in_file)
+        if item.status != "downloaded": continue
+
+        try:
+            _convert_file_to_mp3(ffmpeg_exe, item)
+        except Exception as e:
+            print(f"Failed to convert {item.title}. Error: {str(e)}. Skipped.")
+
+
+def _convert_file_to_mp3(ffmpeg_exe, item):
+    print(f"{item.title} webm => mp3")
+    in_file = item.target_file
+    out_file = item.target_file[:-5] + ".mp3"
+    res = subprocess.run(
+        [ffmpeg_exe, "-i", in_file, "-vn", "-ab", str(item.abr) + "k", "-loglevel", "warning", "-y", out_file])
+    if res.returncode == 0:
+        os.remove(in_file)
 
 
 def main():
@@ -78,7 +86,7 @@ def main():
     history_new = download(args.url, args.output_path, history_old, delay_between_tracks=args.delay, verbose=True)
 
     if args.to_mp3:
-        _convert_to_mp3(args, history_new)
+        _convert_files_to_mp3(args, history_new)
 
     history = _merge_history(history_old, history_new)
     if not args.dont_save_history:

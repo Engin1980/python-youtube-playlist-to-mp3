@@ -1,3 +1,4 @@
+import os
 import json
 
 DEFAULT_HISTORY_FILE_NAME = "__downloaded.yt.json"
@@ -15,6 +16,9 @@ class TrackHistory:
 
 
 def try_load_track_history(history_file_name):
+    if not os.path.exists(history_file_name):
+        return {}
+
     ret = {}
     with open(history_file_name, "r") as f:
         tmp = json.load(f)
