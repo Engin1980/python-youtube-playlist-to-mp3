@@ -49,7 +49,7 @@ is:
 ```shell
 main.py [-h] [--dont-load-history] [--dont-save-history]
                [--delay DELAY] [--history-filename HISTORY_FILENAME]
-               [--to-mp3] [--ffmpeg-path FFMPEG_PATH]
+               [--to-mp3] [--ffmpeg-exe FFMPEG_EXE]
                url output-path
 ```
 
@@ -70,7 +70,7 @@ There are command line arguments available (note `url` and `output-path` are man
 | &#8209;&#8209;history&#8209;filename | Sets the custom history filename, if required. May be absolute or relative. If relative, the file is stored in the output path. | Optional. If not set, default name is used. |
 | &#8209;&#8209;delay | Sets the gap (sleep interval) in seconds between download end/start (to not overhaul YouTube server). | Optional. Default value is 10. |
 | &#8209;&#8209;to&#8209;mp3 | If set, the program will convert downloaded `*.webm` files into `*.mp3` files using FFMPEG. If the conversion is successful, the `*.webm` files are deleted. | Optional. Conversion is not done by default. |
-| &#8209;&#8209;ffmpeg&#8209;path | Location (absolute or relative) to `ffmpeg.exe` file. If not set, the `PATH` environment variable is used to detect the file location. If the file is not found, the script will crash. | Optional. Uses `PATH` environment variable by default.
+| &#8209;&#8209;ffmpeg&#8209;exe | Location (absolute or relative) to `ffmpeg.exe` file, including the filename. If not set, the `PATH` environment variable is used to detect the file location. If the file is not found, the script will crash. | Optional. Uses `PATH` environment variable by default.
 
 More complex usage:
 

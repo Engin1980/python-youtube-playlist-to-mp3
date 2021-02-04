@@ -1,8 +1,9 @@
 import argparse
 import os
-import subprocess
 
+import mp3gain
 import track_history
+import webm2mp3
 from downloader import download
 
 
@@ -29,8 +30,19 @@ def _read_arguments():
     parser.add_argument("--to-mp3",
                         help="Convert downloaded *.webm files to *.mp3 files and delete *.webm files.",
                         action="store_true")
-    parser.add_argument("--ffmpeg-path",
-                        help="Path to ffmpeg.exe (PATH variable is used otherwise).")
+    parser.add_argument("--ffmpeg-exe",
+                        help="Path to ffmpeg.exe, including file name (PATH variable is used otherwise).",
+                        default="ffmpeg.exe")
+    parser.add_argument("--adjust-mp3-gain",
+                        help="Adjust track gain. Only applicable if --to-mp3 is used.",
+                        actins="store_true")
+    parser.add_argument("--target-mp3-gain",
+                        help="Sets the target mp3 gain. Only applicable if --adjust-mp3-gain is used. "
+                             "Default value is 89.",
+                        default=89)
+    parser.add_argument("--mp3gain-exe",
+                        help="Path to mp3gain.exe, including file name (PATH variable is used otherwise).",
+                        default="mp3gain.exe")
     ret = parser.parse_args()
     return ret
 
@@ -58,35 +70,18 @@ def _merge_history(old, new):
     return ret
 
 
-def _convert_files_to_mp3(args, history):
-    ffmpeg_exe = "ffmpeg.exe" if args.ffmpeg_path is None else args.ffmpeg_path
-    for key in history.keys():
-        item = history[key]
-        if item.status != "downloaded": continue
-
-        try:
-            _convert_file_to_mp3(ffmpeg_exe, item)
-        except Exception as e:
-            print(f"Failed to convert {item.title}. Error: {str(e)}. Skipped.")
-
-
-def _convert_file_to_mp3(ffmpeg_exe, item):
-    print(f"{item.title} webm => mp3")
-    in_file = item.target_file
-    out_file = item.target_file[:-5] + ".mp3"
-    res = subprocess.run(
-        [ffmpeg_exe, "-i", in_file, "-vn", "-ab", str(item.abr) + "k", "-loglevel", "warning", "-y", out_file])
-    if res.returncode == 0:
-        os.remove(in_file)
-
-
 def main():
     args = _read_arguments()
     history_old = {} if args.dont_load_history else _load_history(args)
     history_new = download(args.url, args.output_path, history_old, delay_between_tracks=args.delay, verbose=True)
 
     if args.to_mp3:
-        _convert_files_to_mp3(args, history_new)
+        tmp = [h for h in history_new if h.status == "downloaded"]
+        tmp = [{"file": h.target_file, "title": h.title, "abr": h.abr} for h in tmp]
+        webm2mp3.convert_webm_dict_to_mp3(args.ffmpeg_exe, tmp)
+        if args.adjust_mp3_gain:
+            files = [q["file"] for q in tmp]
+            mp3gain.process_files(files, args.mp3gain_exe, args.target_mp3_gain)
 
     history = _merge_history(history_old, history_new)
     if not args.dont_save_history:
