@@ -39,6 +39,7 @@ def _read_arguments():
     parser.add_argument("--target-mp3-gain",
                         help="Sets the target mp3 gain. Only applicable if --adjust-mp3-gain is used. "
                              "Default value is 89.",
+                        type=int,
                         default=89)
     parser.add_argument("--mp3gain-exe",
                         help="Path to mp3gain.exe, including file name (PATH variable is used otherwise).",
@@ -78,10 +79,10 @@ def main():
     if args.to_mp3:
         tmp = [h for h in history_new if h.status == "downloaded"]
         tmp = [{"file": h.target_file, "title": h.title, "abr": h.abr} for h in tmp]
-        webm2mp3.convert_webm_dict_to_mp3(args.ffmpeg_exe, tmp)
+        webm2mp3.convert_webm_files_to_mp3(args.ffmpeg_exe, tmp)
         if args.adjust_mp3_gain:
             files = [q["file"] for q in tmp]
-            mp3gain.process_files(files, args.mp3gain_exe, args.target_mp3_gain)
+            mp3gain.process_files(args.mp3gain_exe, files, args.target_mp3_gain)
 
     history = _merge_history(history_old, history_new)
     if not args.dont_save_history:

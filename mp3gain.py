@@ -1,6 +1,7 @@
 import argparse
 import os
 import subprocess
+from typing import List
 
 
 def _read_arguments():
@@ -17,19 +18,19 @@ def _read_arguments():
     return ret
 
 
-def process_folder(folder, mp3gain_exe, target_gain=89):
+def process_folder(mp3gain_exe: str, folder: str, target_gain: int = 89) -> None:
     mp3files = [f for f in os.listdir(folder) if os.path.isfile(f) and len(f) > 4 and f[-4:].lower() == ".mp3"]
     print(f"\tfound {len(mp3files)} files")
     tmp = [os.path.join(folder, q) for q in mp3files]
-    process_files(tmp, mp3gain_exe, target_gain=target_gain)
+    process_files(mp3gain_exe, tmp, target_gain=target_gain)
 
 
-def process_files(mp3files, mp3gain_exe, target_gain=89):
+def process_files(mp3gain_exe: str, mp3files: List[str], target_gain: int = 89) -> None:
     for mp3file in mp3files:
         process_file(mp3file, mp3gain_exe, target_gain=target_gain)
 
 
-def process_file(mp3file, mp3gain_exe, target_gain=89):
+def process_file(mp3gain_exe: str, mp3file: str, target_gain: int = 89) -> None:
     print(f"mp3gain => {mp3file}")
     try:
         params = [mp3gain_exe, "-r"]
@@ -48,9 +49,9 @@ def main():
     args = _read_arguments()
     print(f"MP3Gain for '{args.path}'")
     if os.path.isfile(args.path):
-        process_file(args.path, args.mp3gain_exe, args.target_gain)
+        process_file(args.mp3gain_exe, args.path, args.target_gain)
     else:
-        process_folder(args.path, args.mp3gain_exe, args.target_gain)
+        process_folder(args.mp3gain_exe, args.path, args.target_gain)
 
 
 if __name__ == "__main__":
