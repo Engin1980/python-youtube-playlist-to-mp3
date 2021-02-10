@@ -27,7 +27,7 @@ def process_folder(mp3gain_exe: str, folder: str, target_gain: int = 89) -> None
 
 def process_files(mp3gain_exe: str, mp3files: List[str], target_gain: int = 89) -> None:
     for mp3file in mp3files:
-        process_file(mp3file, mp3gain_exe, target_gain=target_gain)
+        process_file(mp3gain_exe, mp3file, target_gain=target_gain)
 
 
 def process_file(mp3gain_exe: str, mp3file: str, target_gain: int = 89) -> None:

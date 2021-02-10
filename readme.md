@@ -4,14 +4,14 @@
 
 This repository contains a simple script(s) to download YouTube playlist
 (represented as URL) into a set of `*.webm` files, which can be later converted
-into the `*.mp3` audio files. The script stores the processed playlist items, so 
+into the `*.mp3` audio files and their volume can be adjusted. The script stores the processed playlist items, so 
 they are skipped next time the script is executed.
 
 The script supports only audio stream downloading. However, feel free to adjust 
 the code for the video support.
 
 The conversion to `*.mp3` needs an instalation of FFMPEG to be available on 
-the target computer.
+the target computer. To adjust `.mp3` volume, MP3_GAIN must be available on the target computer (Windows OS only).
 
 ### Main features:
 * Analyse tracks in the YouTube playlist
@@ -19,6 +19,7 @@ the target computer.
 * Skips missing/failed tracks
 * (Optionally) Skips tracks downloaded in previous execution(s)
 * (Optionally) Convert tracks from `*.webm` to `*.mp3` format
+* (Optionally, Windows OS only) Adjusts mp3 volume
 
 ## Requirements & Installation
 
@@ -29,17 +30,20 @@ repository.
 
 To convert `*.webm` files to `*.mp3` files FFMPEG is required.
 
+To adjust volume of MP3 files, the command line version of _MP3 Gain_ must be installed.
+
 ### Instalation
 1. Ensure you have, or install [Python 3.x.x](https://www.python.org/downloads/).
 2. [To convert files to MP3] Ensure you have, or download and extract/install [FFMPEG](https://ffmpeg.org/download.html).
-3. Start Terminal/Command line/Powershell and enter the following command sequence:
+3. [To adjust MP3 file volume] Ensure you have, or download and extract/install [MP3_GAIN](http://mp3gain.sourceforge.net/) (command line version is sufficient).   
+4. Start Terminal/Command line/Powershell and enter the following command sequence:
     
-   3.1 Download or clone this repository (only files from the root are required).
+   4.1 Download or clone this repository (only files from the root are required).
 
-   3.2 (Optionally, but suggested) Create [new virtual environment](https://docs.python.org/3/library/venv.html) 
+   4.2 (Optionally, but suggested) Create [new virtual environment](https://docs.python.org/3/library/venv.html) 
    to be used with this repository.
    
-   3.3 [Install the required packages](https://pip.pypa.io/en/stable/reference/pip_install/) 
+   4.3 [Install the required packages](https://pip.pypa.io/en/stable/reference/pip_install/) 
    from requirements file `requirements.txt`.
    
 ## Execution
@@ -49,7 +53,8 @@ is:
 ```shell
 main.py [-h] [--dont-load-history] [--dont-save-history]
                [--delay DELAY] [--history-filename HISTORY_FILENAME]
-               [--to-mp3] [--ffmpeg-exe FFMPEG_EXE]
+               [--to-mp3] [--ffmpeg-exe FFMPEG_EXE] [--adjust-mp3-gain]
+               [--target-mp3-gain TARGET_MP3_GAIN] [--mp3gain-exe MP3GAIN_EXE]
                url output-path
 ```
 
@@ -71,11 +76,23 @@ There are command line arguments available (note `url` and `output-path` are man
 | &#8209;&#8209;delay | Sets the gap (sleep interval) in seconds between download end/start (to not overhaul YouTube server). | Optional. Default value is 10. |
 | &#8209;&#8209;to&#8209;mp3 | If set, the program will convert downloaded `*.webm` files into `*.mp3` files using FFMPEG. If the conversion is successful, the `*.webm` files are deleted. | Optional. Conversion is not done by default. |
 | &#8209;&#8209;ffmpeg&#8209;exe | Location (absolute or relative) to `ffmpeg.exe` file, including the filename. If not set, the `PATH` environment variable is used to detect the file location. If the file is not found, the script will crash. | Optional. Uses `PATH` environment variable by default.
+| &#8209;&#8209;adjust-mp3-gain | If set, the program will try to adjust volume of MP3 file using `mp3_gain.exe`. | Optional. Adjust is not done by default.
+| &#8209;&#8209;target-mp3-gain | Use custom target mp3 gain. Integer value expected. | If not set, default value 89 is used.
+| &#8209;&#8209;mp3gain-exe | Location (absolute or relative) to `mp3_gain.exe` file, including the filename. If not set, the `PATH` environment variable is used to detect the file location. if the file is not found, the script will crash. | Optional. Uses `PATH` environment variable by default.
 
 More complex usage:
 
 ```shell
-python main.py --dont-load-hstory --delay 10 --to-mp3 --ffmpeg-path "c:/program files/ffmpeg/ffmpeg.exe" https://www.youtube.com/playlist?list=ACF5... C:/TEMP
+python main.py 
+  --dont-load-hstory 
+  --delay 10 
+  --to-mp3 
+  --ffmpeg-exe "c:/program files/ffmpeg/ffmpeg.exe"
+  --adjust-mp3-gain
+  --target-mp3-gain 93
+  --mp3gain-exe "C:/program files/mp3gain/mp3gain.exe" 
+  https://www.youtube.com/playlist?list=ACF5... 
+  C:/TEMP
 ```
 
    

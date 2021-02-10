@@ -1,5 +1,6 @@
 import datetime
 import time
+from typing import Dict
 
 from pytube import Playlist, YouTube
 
@@ -13,7 +14,9 @@ def _log(*args, **kwargs):
         print(*args, **kwargs)
 
 
-def download(url, output, history_old, *, delay_between_tracks=10, verbose=True):
+def download(
+        url: str, output: str, history_old: Dict[str, TrackHistory], *,
+        delay_between_tracks: int = 10, verbose: bool = True) -> Dict[str, TrackHistory]:
     global _verbose
     _verbose = verbose
     history_new = {}
