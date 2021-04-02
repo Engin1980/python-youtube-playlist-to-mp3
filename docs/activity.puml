@@ -1,0 +1,18 @@
+@startuml
+title (Python) YouTube-Playlist-to-MP3 process
+
+(*) -right-> Download from YouTube
+note bottom: This produces WEBM media file\nwhich can be played e.g. using VLC.\nYou need to decide, if this format is\nsufficient for you or you need MP3 file.
+-right-> [WEBM file] if "" then
+  ->[WEBM file is fine] (*)
+else
+  -->[I need MP3 file] Convert 'webm' to MP3
+  note right: FFMPEG required
+  --> if "" then
+    ->[Volume is fine] (*)
+  else
+    -->[I need to normalize volume] Normalize volume
+    note right: MP3Gain is required
+    --> (*)
+
+@enduml

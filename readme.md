@@ -21,6 +21,16 @@ the target computer. To adjust `.mp3` volume, MP3_GAIN must be available on the 
 * (Optionally) Convert tracks from `*.webm` to `*.mp3` format
 * (Optionally, Windows OS only) Adjusts mp3 volume
 
+![Activity sequence](docs/activity.png)
+
+## History
+
+| Date | Note |
+| --- | --- |
+| 2021-04-02 | Updated version of pytube to 10.6.1 (older invokes error 410) |
+| 2021-02-10 | First published working version |
+
+
 ## Requirements & Installation
 
 The script was tested on Python 3.7.6. 
