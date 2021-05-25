@@ -15,7 +15,7 @@ the target computer. To adjust `.mp3` volume, MP3_GAIN must be available on the 
 
 ### Main features:
 * Analyse tracks in the YouTube playlist
-* From every track, download best audio (highest bit-rate) stream to local drive as `*.webm` file
+* From every track, download the best audio (highest bit-rate) stream to local drive as `*.webm` file
 * Skips missing/failed tracks
 * (Optionally) Skips tracks downloaded in previous execution(s)
 * (Optionally) Convert tracks from `*.webm` to `*.mp3` format
@@ -27,6 +27,7 @@ the target computer. To adjust `.mp3` volume, MP3_GAIN must be available on the 
 
 | Date | Note |
 | --- | --- |
+| 2021-05-26 | Updated version of pytube to 10.8.2 (older invokes error 404) |
 | 2021-04-02 | Updated version of pytube to 10.6.1 (older invokes error 410) |
 | 2021-02-10 | First published working version |
 

@@ -1,4 +1,4 @@
 importlib-metadata==3.4.0
-pytube==10.6.1
+pytube==10.8.2
 typing-extensions==3.7.4.3
 zipp==3.4.0
