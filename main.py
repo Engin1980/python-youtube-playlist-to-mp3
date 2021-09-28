@@ -71,8 +71,24 @@ def _merge_history(old, new):
     return ret
 
 
+def print_environment():
+    print("Current interpreter:")
+    import sys
+    print(sys.executable)
+
+    print("Current environment")
+    import importlib_metadata
+    dists = importlib_metadata.distributions()
+    for dist in dists:
+        name = dist.metadata["Name"]
+        version = dist.version
+        print(f'\t{name}=={version}')
+    print()
+
+
 def main():
     args = _read_arguments()
+    print_environment()
     history_old = {} if args.dont_load_history else _load_history(args)
     history_new = download(args.url, args.output_path, history_old, delay_between_tracks=args.delay, verbose=True)
 
