@@ -25,11 +25,12 @@ the target computer. To adjust `.mp3` volume, MP3_GAIN must be available on the 
 
 ## History
 
-| Date | Note |
-| --- | --- |
-| 2021-05-26 | Updated version of pytube to 10.8.2 (older invokes error 404) |
-| 2021-04-02 | Updated version of pytube to 10.6.1 (older invokes error 410) |
-| 2021-02-10 | First published working version |
+| Date | Note                                                                                      |
+| --- |-------------------------------------------------------------------------------------------|
+| 2023-09-24 | Updated version of pytube to 15.0.0 and other dependent packages (see `requirements.txt`) | 
+| 2021-05-26 | Updated version of pytube [__downloaded.yt.json](..%2F..%2F..%2FOneDrive%20-%20Ostravska%20univerzita%2FSynchronized%2FYouTube%20Playlists%2FETrance%2F__downloaded.yt.json)to 10.8.2 (older invokes error 404)                             |
+| 2021-04-02 | Updated version of pytube to 10.6.1 (older invokes error 410)                             |
+| 2021-02-10 | First published working version                                                           |
 
 
 ## Requirements & Installation
