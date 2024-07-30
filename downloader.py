@@ -16,7 +16,7 @@ def _log(*args, **kwargs):
 
 def download(
         url: str, output: str, history_old: Dict[str, TrackHistory], *,
-        delay_between_tracks: int = 10, verbose: bool = True) -> Dict[str, TrackHistory]:
+        delay_between_tracks: int = 10, repeat_errors:bool, verbose: bool = True) -> Dict[str, TrackHistory]:
     global _verbose
     _verbose = verbose
     history_new = {}
@@ -28,12 +28,15 @@ def download(
     except Exception as ex:
         _log(f"ERROR: Failed to download the playlist. Check it is NOT PRIVATE.")
         raise(ex)
-    _log("Going for videos...")
+    _log("Looking for videos...")
     for index, url in enumerate(ypl.video_urls):
         _log(f"{index + 1}. of {track_count}")
         if url in history_old.keys():
-            _log(f"\tVideo '{history_old[url].title}' already processed as '{history_old[url].status}', skipping")
-            continue
+            if repeat_errors and history_old[url].status.startswith("error:"):
+                _log(f"\tVideo '{history_old[url].title}' already processed as '{history_old[url].status}' with an error, we will give it another try")
+            else:
+                _log(f"\tVideo '{history_old[url].title}' already processed as '{history_old[url].status}', skipping")
+                continue
         try:
             yt = YouTube(url)
             try:

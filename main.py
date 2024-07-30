@@ -44,6 +44,9 @@ def _read_arguments():
     parser.add_argument("--mp3gain-exe",
                         help="Path to mp3gain.exe, including file name (PATH variable is used otherwise).",
                         default="mp3gain.exe")
+    parser.add_argument("--repeat-errors",
+                        help="If used, previously failed downloads are repeated.",
+                        action="store_true")
     ret = parser.parse_args()
     return ret
 
@@ -90,7 +93,7 @@ def main():
     args = _read_arguments()
     print_environment()
     history_old = {} if args.dont_load_history else _load_history(args)
-    history_new = download(args.url, args.output_path, history_old, delay_between_tracks=args.delay, verbose=True)
+    history_new = download(args.url, args.output_path, history_old, delay_between_tracks=args.delay, repeat_errors=args.repeat_errors, verbose=True)
 
     if args.to_mp3:
         tmp = [h for h in history_new.values() if h.status == "downloaded"]
