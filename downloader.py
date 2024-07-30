@@ -36,10 +36,10 @@ def download(
                 (out_file_name, stream_id, abr) = _process_video(yt, output)
                 history_new[url] = _create_history_record_success(yt, stream_id, abr, out_file_name)
             except Exception as e:
-                _log("\tVideo " + str(index) + " :: " + url + " erroneous, will be not downloaded.")
+                _log("\tVideo " + str(index) + " :: " + url + " erroneous, will be not downloaded: " + e.__str__())
                 history_new[url] = _create_history_record_fail("Error when downloading stream.", e, yt=yt)
         except Exception as e:
-            _log("\tVideo " + str(index) + " :: " + url + " erroneous, will be not downloaded.")
+            _log("\tVideo " + str(index) + " :: " + url + " erroneous, will be not downloaded: " + e.__str__())
             history_new[url] = _create_history_record_fail("Unable to fetch from YouTube", e, yt=None)
 
         _log("\tAnti-block-delay...")
