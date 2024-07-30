@@ -27,6 +27,7 @@ the target computer. To adjust `.mp3` volume, MP3_GAIN must be available on the 
 
 | Date | Note                                                                                      |
 | --- |-------------------------------------------------------------------------------------------|
+| 2024-07-30 | Fixing bugx in pytube - see `cypher_py_replacement_info.md` file
 | 2023-09-24 | Updated version of pytube to 15.0.0 and other dependent packages (see `requirements.txt`) | 
 | 2021-05-26 | Updated version of pytube to 10.8.2 (older invokes error 404)                             |
 | 2021-04-02 | Updated version of pytube to 10.6.1 (older invokes error 410)                             |

@@ -23,7 +23,11 @@ def download(
     _log("Fetching playlist...")
     ypl = Playlist(url)
     track_count = len(ypl.video_urls)
-    _log(f"Found playlist '{ypl.title}' with {track_count} tracks, {len(history_old)} seems to be downloaded already.")
+    try:
+        _log(f"Found playlist '{ypl.title}' with {track_count} tracks, {len(history_old)} seems to be downloaded already.")
+    except Exception as ex:
+        _log(f"ERROR: Failed to download the playlist. Check it is NOT PRIVATE.")
+        raise(ex)
     _log("Going for videos...")
     for index, url in enumerate(ypl.video_urls):
         _log(f"{index + 1}. of {track_count}")
