@@ -2,7 +2,8 @@ import datetime
 import time
 from typing import Dict
 
-from pytube import Playlist, YouTube
+# from pytube import Playlist, YouTube
+from pytubefix import Playlist, YouTube
 
 from track_history import TrackHistory
 

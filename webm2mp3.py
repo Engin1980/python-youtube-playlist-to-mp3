@@ -38,7 +38,7 @@ def convert_webm_file_to_mp3(ffmpeg_exe: str, file_name: str, title: str = None,
     try:
         print(f"{title} webm => mp3")
         in_file = file_name
-        out_file = file_name[:-5] + ".mp3"
+        out_file = file_name[:-4] + ".mp3"
         params = [ffmpeg_exe, "-i", in_file, "-vn"]
         if abr is not None:
             params.extend(["-ab", str(abr) + "k"])

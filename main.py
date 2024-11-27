@@ -101,7 +101,7 @@ def main():
         webm2mp3.convert_webm_files_to_mp3(args.ffmpeg_exe, tmp)
         if args.adjust_mp3_gain:
             files = [q["file"] for q in tmp]
-            files = [file[:-4] + "mp3" for file in files]
+            files = [file[:-4] + ".mp3" for file in files]
             mp3gain.process_files(args.mp3gain_exe, files, args.target_mp3_gain)
 
     history = _merge_history(history_old, history_new)

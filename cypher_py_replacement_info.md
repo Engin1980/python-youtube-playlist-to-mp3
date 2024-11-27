@@ -1,3 +1,7 @@
+# Note: Deprecated
+
+As this project do not use PyTube anymore, the content of this file is probably irrelevant.
+
 ## Resolve for issues
 
 In case observing issue above, use the content of the file `cypher_py_replacement.txt` and replace
