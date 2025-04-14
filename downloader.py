@@ -41,6 +41,9 @@ def download(
         try:
             yt = YouTube(url)
             try:
+                # TODO process following info
+                author = yt.author
+                title = yt.title
                 (out_file_name, stream_id, abr) = _process_video(yt, output)
                 history_new[url] = _create_history_record_success(yt, stream_id, abr, out_file_name)
             except Exception as e:
