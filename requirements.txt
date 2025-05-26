@@ -1,6 +1,6 @@
-importlib-metadata==8.5.0
-pytubefix==8.12.2
-typing-extensions==4.12.2
+importlib-metadata==8.7.0
+pytubefix==9.0.1
+typing-extensions==4.13.2
 zipp==3.21.0
-webdriver-manager==7.0.2
+webdriver-manager==4.0.2
 selenium==4.33.0
