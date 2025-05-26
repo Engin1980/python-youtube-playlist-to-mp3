@@ -1,9 +1,7 @@
 import argparse
 import os
 
-import mp3gain
-import track_history
-import webm2mp3
+from lib import mp3gain, webm2mp3, track_history
 from downloader import download
 
 
@@ -11,6 +9,8 @@ def _read_arguments():
     parser = argparse.ArgumentParser(description='The script to download audio tracks (webm) from YouTube playlist')
     parser.add_argument("url",
                         help="URL of YouTube playlist. Mandatory.")
+    parser.add_argument("--local-file",
+                        help="Path to the local file where the list of YouTube URLs is stored in HTML. Optional.")
     parser.add_argument("output_path", metavar="output-path",
                         help="Path to the local directory where the result will be saved. Mandatory.")
     parser.add_argument("--dont-load-history",
@@ -93,7 +93,10 @@ def main():
     args = _read_arguments()
     print_environment()
     history_old = {} if args.dont_load_history else _load_history(args)
-    history_new = download(args.url, args.output_path, history_old, delay_between_tracks=args.delay, repeat_errors=args.repeat_errors, verbose=True)
+    history_new = download(args.url, args.output_path, history_old,
+                           delay_between_tracks=args.delay, repeat_errors=args.repeat_errors,
+                           local_file=args.local_file,
+                           verbose=True)
 
     if args.to_mp3:
         tmp = [h for h in history_new.values() if h.status == "downloaded"]
