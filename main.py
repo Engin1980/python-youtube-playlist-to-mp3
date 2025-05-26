@@ -112,8 +112,8 @@ def __load_config():
 
 def __print_configuration(cfg:Config):
     print("Configuration:")
-    print(f"\tmp3gain_exe: {cfg.mp3gain_exe}")
-    print(f"\tffmpeg_exe: {cfg.ffmpeg_exe}")
+    print(f"\tmp3gain_exe: {cfg.mp3gain_exe} \t ({os.path.abspath(cfg.mp3gain_exe)})")
+    print(f"\tffmpeg_exe: {cfg.ffmpeg_exe} \t ({os.path.abspath(cfg.ffmpeg_exe)})")
     print()
 
 
@@ -154,12 +154,12 @@ def main():
     if args.to_mp3:
         tmp = [h for h in history_new.values() if h.status == "downloaded"]
         tmp = [{"file": h.target_file, "title": h.title, "abr": h.abr} for h in tmp]
-        webm2mp3.convert_webm_files_to_mp3(args.ffmpeg_exe, tmp)
+        webm2mp3.convert_webm_files_to_mp3(cfg.ffmpeg_exe, tmp)
 
         if args.adjust_mp3_gain:
             files = [q["file"] for q in tmp]
             files = [file[:-4] + ".mp3" for file in files]
-            mp3gain.process_files(args.mp3gain_exe, files, args.target_mp3_gain)
+            mp3gain.process_files(cfg.mp3gain_exe, files, args.target_mp3_gain)
 
     history = __merge_history(history_old, history_new)
     if not args.dont_save_history:

@@ -5,12 +5,31 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
-            "type": "python",
+            "name": "Main (EHouse)",
+            "type": "debugpy",
             "request": "launch",
-            "program": "main.py",
+            "program": "${file}",
             "console": "integratedTerminal",
-            "justMyCode": true
+            "args": [
+                "--to-mp3", 
+                "--delay", "3",
+                "--adjust-mp3-gain",                
+                "https://www.youtube.com/playlist?list=PL0bQQrRRNSOJ37BRHvXuG5e2HG1GlHime",
+                ".\\..\\EHouse"]
+        },
+        {
+            "name": "Main (ETrance)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                "--to-mp3", 
+                "--delay", "3",
+                "--long-playlist-support-enabled","true",
+                "--adjust-mp3-gain",                
+                "https://www.youtube.com/playlist?list=PLF273091A22D1723E",
+                ".\\..\\ETrance"]
         }
     ]
 }

@@ -1,5 +1,6 @@
 import datetime
 import time
+import os
 from typing import Dict
 
 # from pytube import Playlist, YouTube
@@ -29,8 +30,6 @@ def __get_tracks_using_pytubefix(url: str):
     ret: List[str] = []
     try:
         ypl = Playlist(url)
-        track_count = len(ypl.video_urls)
-
         for url in ypl.video_urls:
             ret.append(url)
     except Exception as ex:
@@ -46,7 +45,7 @@ def __get_tracks_using_selenium(url: str):
     regex = r"<a id=\"video-title\" class=\"yt-simple-endpoint style-scope ytd-playlist-video-renderer\" title=\"(.+)\" href=\"(.+?)&.+\">"
     matches = re.findall(regex, html_content)
     for match in matches:
-        url = "http://www.youtube.com" + match[1]
+        url = "https://www.youtube.com" + match[1]
         ret.append(url)
     return ret
 
@@ -81,10 +80,7 @@ def download(
                 continue
         try:
             yt = YouTube(url)
-            try:
-                # TODO process following info
-                author = yt.author
-                title = yt.title
+            try:                
                 (out_file_name, stream_id, abr) = __process_video(yt, output)
                 history_new[url] = __create_history_record_success(yt, stream_id, abr, out_file_name)
             except Exception as e:
@@ -101,14 +97,31 @@ def download(
     return history_new
 
 
+def __convert_to_valid_filename(s: str, replacement: str = "_", max_length: int = 255) -> str:
+    s = re.sub(r'[<>:"/\\|?*\x00-\x1F]', replacement, s)
+    s = s.strip().strip(".")
+    s = re.sub(f"{re.escape(replacement)}+", replacement, s)
+    s = s[:max_length]
+    return s
+
+
 def __process_video(yt, output_path):
     __log(f"\ttitle: {yt.title}")
     __log(f"\tlength: {yt.length} seconds")
+
+    author = yt.author
+    # title = yt.title
+
     ys, abr = __get_best_audio_stream(yt)
     __log("\t\tAudio stream: ", ys)
     __log("\tDownloading...")
     final_file_name = ys.download(output_path=output_path)
     __log("\t... completed")
+
+    new_file_name = f"[{author}] {final_file_name}"
+    new_file_name = __convert_to_valid_filename(new_file_name)
+    os.rename(final_file_name, new_file_name)
+
     return final_file_name, ys.itag, abr
 
 
