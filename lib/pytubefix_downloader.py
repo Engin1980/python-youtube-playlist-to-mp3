@@ -80,7 +80,7 @@ def download(
                 continue
         try:
             yt = YouTube(url)
-            try:                
+            try:
                 (out_file_name, stream_id, abr) = __process_video(yt, output)
                 history_new[url] = __create_history_record_success(yt, stream_id, abr, out_file_name)
             except Exception as e:
@@ -110,7 +110,6 @@ def __process_video(yt, output_path):
     __log(f"\tlength: {yt.length} seconds")
 
     author = yt.author
-    # title = yt.title
 
     ys, abr = __get_best_audio_stream(yt)
     __log("\t\tAudio stream: ", ys)
@@ -118,9 +117,19 @@ def __process_video(yt, output_path):
     final_file_name = ys.download(output_path=output_path)
     __log("\t... completed")
 
-    new_file_name = f"[{author}] {final_file_name}"
-    new_file_name = __convert_to_valid_filename(new_file_name)
-    os.rename(final_file_name, new_file_name)
+    def __extend_file_name_if_required(file_path: str, prefix: str) -> str:
+        import os
+        directory = os.path.dirname(file_path)
+        filename = os.path.basename(file_path)
+
+        if "-" in filename:
+            return file_path
+
+        new_file_path = os.path.join(directory, prefix + " -- " + filename)
+        os.rename(file_path, new_file_path)
+        return new_file_path
+
+    final_file_name = __extend_file_name_if_required(final_file_name, author)
 
     return final_file_name, ys.itag, abr
 

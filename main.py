@@ -149,8 +149,11 @@ def main():
         if args.long_playlist_support_enabled \
         else PlaylistDownloadType.PYTUBEFIX
 
-    load_history = args.history in ["LOAD", "LOADSAVE"]
-    save_history = args.history in ["SAVE", "LOADSAVE"]
+    history : str = args.history
+    history = history.upper()
+    load_history = history in ["LOAD", "LOADSAVE"]
+    save_history = history in ["SAVE", "LOADSAVE"]
+    del history
 
     history_old = {} if not load_history else __load_history(args)
     history_new = download(args.url, pds, args.output_path, history_old,

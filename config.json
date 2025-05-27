@@ -1,6 +1,6 @@
 {
   "mp3gain_exe": "./../_mp3gain/mp3gain.exe",
   "ffmpeg_exe": "./../_ffmpeg/bin/ffmpeg.exe",
-  "delay_between_downloads": 10,
+  "delay_between_downloads": 3,
   "verbose":true
 }
