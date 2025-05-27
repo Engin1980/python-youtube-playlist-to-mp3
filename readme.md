@@ -27,6 +27,7 @@ the target computer. To adjust `.mp3` volume, MP3_GAIN must be available on the 
 
 | Date       | Note                                                                                             |
 |------------|--------------------------------------------------------------------------------------------------|
+| 2025-05-27 | Support for long playlists (over 100 tracks) added. This must be enabled in the configuration. `config.json` configuration file introduced and startup arguments changed.
 | 2024-11-27 | PyTubeFix used as a replacement of PyTube package. Error in extracting file extensions is fixed. |
 | 2024-07-30 | Fixing bugx in pytube - see `cypher_py_replacement_info.md` file                                 
 | 2023-09-24 | Updated version of pytube to 15.0.0 and other dependent packages (see `requirements.txt`)        | 
@@ -37,7 +38,7 @@ the target computer. To adjust `.mp3` volume, MP3_GAIN must be available on the 
 
 ## Requirements & Installation
 
-The script was tested on Python 3.7.6. 
+The script was tested on Python 3.13.2. 
 
 Additional required libraries are presented in `requirements.txt` file in the 
 repository.
@@ -59,22 +60,25 @@ To adjust volume of MP3 files, the command line version of _MP3 Gain_ must be in
    
    4.3 [Install the required packages](https://pip.pypa.io/en/stable/reference/pip_install/) 
    from requirements file `requirements.txt`.
+5. Adjust the content of the `config.json` file with the correct path to `mp3gain.exe` and `ffmpeg.exe` (only if you intend to use them).
    
 ## Execution
 
 The execution is done via `main.py` script. From command line/terminal, the generic usage
 is:
 ```shell
-main.py [-h] [--dont-load-history] [--dont-save-history]
-               [--delay DELAY] [--history-filename HISTORY_FILENAME]
-               [--to-mp3] [--ffmpeg-exe FFMPEG_EXE] [--adjust-mp3-gain]
-               [--target-mp3-gain TARGET_MP3_GAIN] [--mp3gain-exe MP3GAIN_EXE]
+main.py [--history NONE|LOAD|SAVE|LOADSAVE]
+               [--history-filename HISTORY_FILENAME]
+               [--to-mp3] 
+               [--adjust-mp3-gain]
+               [--target-mp3-gain TARGET_MP3_GAIN] 
+               [--long-playlist-support-enabled]
                url output-path
 ```
 
 Simple usage from the command line:
 ```shell
-python main.py https://www.youtube.com/playlist?list=ACF5.... C:/TEMP
+python main.py https://www.youtube.com/playlist?list=ABCDEFGHIJK C:/TEMP
 ```
 
 There are command line arguments available (note `url` and `output-path` are mandatory positional arguments):
@@ -84,10 +88,8 @@ There are command line arguments available (note `url` and `output-path` are man
 | --------- | ------- | ---------- |
 | url       | The URL of the input YouTube playlist, e.g. `https://www.youtube.com/playlist?list=OLAK5...` | Mandatory. |
 | output&#8209;path | The output path (absolute or relative) where the result will be stored. | Mandatory. |
-| &#8209;&#8209;dont&#8209;load&#8209;history | If set, the previously downloaded tracks will be downloaded again. | Optional. If not set, history is loaded by default. |
-| &#8209;&#8209;dont&#8209;save&#8209;history | If set, the list of downloaded tracks will not be saved for future history use. | Optional. If not set, history is saved by default. |
-| &#8209;&#8209;history&#8209;filename | Sets the custom history filename, if required. May be absolute or relative. If relative, the file is stored in the output path. | Optional. If not set, default name is used. |
-| &#8209;&#8209;delay | Sets the gap (sleep interval) in seconds between download end/start (to not overhaul YouTube server). | Optional. Default value is 10. |
+| &#8209;&#8209;history | How to handle the history. Choices are **case sensitive!** `NONE` = history is neither loaded nor stored; `LOAD` = history is loaded, but not stored; `SAVE` = History is not loaded, but is stored; `LOADSAVE` = history is loaded and stored. For more detailed explanation see below. | Optional. Default is LOADSAVE.|
+| &#8209;&#8209;history&#8209;filename | Sets the custom history filename, if required. May be absolute or relative. Relative path is related to the output path. | Optional. If not set, default name is used. |
 | &#8209;&#8209;to&#8209;mp3 | If set, the program will convert downloaded `*.webm` files into `*.mp3` files using FFMPEG. If the conversion is successful, the `*.webm` files are deleted. | Optional. Conversion is not done by default. |
 | &#8209;&#8209;ffmpeg&#8209;exe | Location (absolute or relative) to `ffmpeg.exe` file, including the filename. If not set, the `PATH` environment variable is used to detect the file location. If the file is not found, the script will crash. | Optional. Uses `PATH` environment variable by default.
 | &#8209;&#8209;adjust-mp3-gain | If set, the program will try to adjust volume of MP3 file using `mp3_gain.exe`. | Optional. Adjust is not done by default.
@@ -98,17 +100,24 @@ More complex usage:
 
 ```shell
 python main.py 
-  --dont-load-hstory 
-  --delay 10 
+  --history SAVE
   --to-mp3 
-  --ffmpeg-exe "c:/program files/ffmpeg/ffmpeg.exe"
   --adjust-mp3-gain
   --target-mp3-gain 93
-  --mp3gain-exe "C:/program files/mp3gain/mp3gain.exe" 
   https://www.youtube.com/playlist?list=ACF5... 
   C:/TEMP
 ```
 
+## Other topics
+
+### History
+
+By default, the script loads history file at the beginning. There, all previous download attempts are stored, so the already downloaded items are not processed again. When the script is completed, newly processed items are added into the history and the file is stored for the further usage.
+There are 4 options:
+* NONE -- means history is not loaded at the beginning (so everything from the playlist will be downloaded) and nothing is saved at the end (so next time everything will be downloaded again).
+* LOAD - means history is loaded at the beginning (so previously processed videos will be skipped), but nothing is saved at the end (so next time currently processed items will be processed again).
+* SAVE - means history is not loaded at the beginning (so everything from the playlist will be downloaded), but processed items are saved into the history file at the end (so they will not be downloaded again next time, if history will be used).
+* LOADSAVE - means history is loaded at the beginning (so previously processed videos will be skipped) and processed items are saved into the history file at the end (so they will not be downloaded again next time, if history will be used).
    
 
 

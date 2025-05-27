@@ -11,6 +11,8 @@ from lib.pytubefix_downloader import download, PlaylistDownloadType
 class Config:
     mp3gain_exe: str
     ffmpeg_exe: str
+    delay_between_downloads: int
+    verbose: bool
 
 
 def __read_arguments():
@@ -22,16 +24,15 @@ def __read_arguments():
     parser.add_argument("--long-playlist-support-enabled",
                         help="Use for playlists longer than 100 tracks. Optional, default false.",
                         default=False)
-    parser.add_argument("--dont-load-history",
-                        help="Do not load the history file from previous downloading.",
-                        action="store_true")
-    parser.add_argument("--dont-save-history",
-                        help="Do not save the history file after current downloading",
-                        action="store_true")
-    parser.add_argument("--delay",
-                        help="Delay between downloads (in seconds). Optional, default 10.",
-                        type=int,
-                        default=10)
+    parser.add_argument("--history",
+        choices=["NONE", "LOAD", "SAVE", "LOADSAVE"],
+        default="loadsave",
+        help="Specify how to handle the history file (case-sensitive!!): "
+            "'NONE' (ignore history), "
+            "'LOAD' (load history only), "
+            "'SAVE' (save history only), "
+            "'LOADSAVE' (load and save history)."
+)
     parser.add_argument("--history-filename",
                         help="Name of the file where download history is stored. Optional."
                              " Default: __downloaded.yt.json",
@@ -106,6 +107,9 @@ def __load_config():
         raise FileNotFoundError(f"mp3gain executable not found: {ret.mp3gain_exe} ({os.path.abspath(ret.mp3gain_exe)})")
     if not os.path.exists(ret.ffmpeg_exe):
         raise FileNotFoundError(f"ffmpeg executable not found: {ret.ffmpeg_exe} ({os.path.abspath(ret.ffmpeg_exe)})")
+    if ret.delay_between_downloads < 0:
+        raise ValueError(f"Invalid delay value: {ret.delay_between_downloads}. "
+                         "It must be a non-negative integer.")
 
     return ret
 
@@ -114,6 +118,7 @@ def __print_configuration(cfg:Config):
     print("Configuration:")
     print(f"\tmp3gain_exe: {cfg.mp3gain_exe} \t ({os.path.abspath(cfg.mp3gain_exe)})")
     print(f"\tffmpeg_exe: {cfg.ffmpeg_exe} \t ({os.path.abspath(cfg.ffmpeg_exe)})")
+    print(f"\tdelay: {cfg.delay_between_downloads} seconds")
     print()
 
 
@@ -122,9 +127,7 @@ def __print_arguments(args):
     print(f"\turl: {args.url}")
     print(f"\toutput_path: {args.output_path}")
     print(f"\tlong_playlist_support_enabled: {args.long_playlist_support_enabled}")
-    print(f"\tdont_load_history: {args.dont_load_history}")
-    print(f"\tdont_save_history: {args.dont_save_history}")
-    print(f"\tdelay: {args.delay}")
+    print(f"\thistory: {args.history}")
     print(f"\thistory_filename: {args.history_filename}")
     print(f"\tto_mp3: {args.to_mp3}")
     print(f"\tadjust_mp3_gain: {args.adjust_mp3_gain}")
@@ -146,10 +149,13 @@ def main():
         if args.long_playlist_support_enabled \
         else PlaylistDownloadType.PYTUBEFIX
 
-    history_old = {} if args.dont_load_history else __load_history(args)
+    load_history = args.history in ["LOAD", "LOADSAVE"]
+    save_history = args.history in ["SAVE", "LOADSAVE"]
+
+    history_old = {} if not load_history else __load_history(args)
     history_new = download(args.url, pds, args.output_path, history_old,
-                           delay_between_tracks=args.delay, repeat_errors=args.repeat_errors,
-                           verbose=True)
+                           delay_between_tracks=cfg.delay_between_downloads, repeat_errors=args.repeat_errors,
+                           verbose=cfg.verbose)
 
     if args.to_mp3:
         tmp = [h for h in history_new.values() if h.status == "downloaded"]
@@ -161,8 +167,8 @@ def main():
             files = [file[:-4] + ".mp3" for file in files]
             mp3gain.process_files(cfg.mp3gain_exe, files, args.target_mp3_gain)
 
-    history = __merge_history(history_old, history_new)
-    if not args.dont_save_history:
+    if save_history:
+        history = __merge_history(history_old, history_new)
         __save_history(args, history)
 
 
