@@ -53,7 +53,7 @@ To adjust volume of MP3 files, the command line version of _MP3 Gain_ must be in
 3. [To adjust MP3 file volume] Ensure you have, or download and extract/install [MP3_GAIN](http://mp3gain.sourceforge.net/) (command line version is sufficient).   
 4. Start Terminal/Command line/Powershell and enter the following command sequence:
     
-   4.1 Download or clone this repository (only files from the root are required).
+   4.1 Download or clone this repository.
 
    4.2 (Optionally, but suggested) Create [new virtual environment](https://docs.python.org/3/library/venv.html) 
    to be used with this repository.
