@@ -62,11 +62,8 @@ def __load_history(args):
 
 
 def __save_history(args, history):
-    if args.dont_save_history:
-        return
-    else:
-        full_history_file_name = os.path.join(args.output_path, args.history_filename)
-        track_history.save_track_history(history, full_history_file_name)
+    full_history_file_name = os.path.join(args.output_path, args.history_filename)
+    track_history.save_track_history(history, full_history_file_name)
 
 
 def __merge_history(old, new):

@@ -27,9 +27,10 @@ the target computer. To adjust `.mp3` volume, MP3_GAIN must be available on the 
 
 | Date       | Note                                                                                             |
 |------------|--------------------------------------------------------------------------------------------------|
+| 2025-06-15 | Fixing bug in saving download history. Extending documentation.
 | 2025-05-27 | Support for long playlists (over 100 tracks) added. This must be enabled in the configuration. `config.json` configuration file introduced and startup arguments changed.
 | 2024-11-27 | PyTubeFix used as a replacement of PyTube package. Error in extracting file extensions is fixed. |
-| 2024-07-30 | Fixing bugx in pytube - see `cypher_py_replacement_info.md` file                                 
+| 2024-07-30 | Fixing bugs in pytube - see `cypher_py_replacement_info.md` file                                 
 | 2023-09-24 | Updated version of pytube to 15.0.0 and other dependent packages (see `requirements.txt`)        | 
 | 2021-05-26 | Updated version of pytube to 10.8.2 (older invokes error 404)                                    |
 | 2021-04-02 | Updated version of pytube to 10.6.1 (older invokes error 410)                                    |
@@ -61,7 +62,7 @@ To adjust volume of MP3 files, the command line version of _MP3 Gain_ must be in
    4.3 [Install the required packages](https://pip.pypa.io/en/stable/reference/pip_install/) 
    from requirements file `requirements.txt`.
 5. Adjust the content of the `config.json` file with the correct path to `mp3gain.exe` and `ffmpeg.exe` (only if you intend to use them).
-   
+
 ## Execution
 
 The execution is done via `main.py` script. From command line/terminal, the generic usage
@@ -81,7 +82,9 @@ Simple usage from the command line:
 python main.py https://www.youtube.com/playlist?list=ABCDEFGHIJK C:/TEMP
 ```
 
-There are command line arguments available (note `url` and `output-path` are mandatory positional arguments):
+Command line arguments available (note `url` and `output-path` are mandatory positional arguments) follows.
+
+> Note **all paths are relative to the current working directory** (including config and output).
 
 
 | Parameter | Meaning | Value |
@@ -91,10 +94,8 @@ There are command line arguments available (note `url` and `output-path` are man
 | &#8209;&#8209;history | How to handle the history. Choices are **case sensitive!** `NONE` = history is neither loaded nor stored; `LOAD` = history is loaded, but not stored; `SAVE` = History is not loaded, but is stored; `LOADSAVE` = history is loaded and stored. For more detailed explanation see below. | Optional. Default is LOADSAVE.|
 | &#8209;&#8209;history&#8209;filename | Sets the custom history filename, if required. May be absolute or relative. Relative path is related to the output path. | Optional. If not set, default name is used. |
 | &#8209;&#8209;to&#8209;mp3 | If set, the program will convert downloaded `*.webm` files into `*.mp3` files using FFMPEG. If the conversion is successful, the `*.webm` files are deleted. | Optional. Conversion is not done by default. |
-| &#8209;&#8209;ffmpeg&#8209;exe | Location (absolute or relative) to `ffmpeg.exe` file, including the filename. If not set, the `PATH` environment variable is used to detect the file location. If the file is not found, the script will crash. | Optional. Uses `PATH` environment variable by default.
 | &#8209;&#8209;adjust-mp3-gain | If set, the program will try to adjust volume of MP3 file using `mp3_gain.exe`. | Optional. Adjust is not done by default.
 | &#8209;&#8209;target-mp3-gain | Use custom target mp3 gain. Integer value expected. | If not set, default value 89 is used.
-| &#8209;&#8209;mp3gain-exe | Location (absolute or relative) to `mp3_gain.exe` file, including the filename. If not set, the `PATH` environment variable is used to detect the file location. if the file is not found, the script will crash. | Optional. Uses `PATH` environment variable by default.
 
 More complex usage:
 
