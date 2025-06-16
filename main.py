@@ -4,7 +4,7 @@ import json
 from dataclasses import dataclass
 
 from lib import mp3gain, webm2mp3, track_history
-from lib.pytubefix_downloader import download, PlaylistDownloadType
+from lib.pytubefix_downloader import download_list, PlaylistDownloadType
 
 
 @dataclass
@@ -153,9 +153,9 @@ def main():
     del history
 
     history_old = {} if not load_history else __load_history(args)
-    history_new = download(args.url, pds, args.output_path, history_old,
-                           delay_between_tracks=cfg.delay_between_downloads, repeat_errors=args.repeat_errors,
-                           verbose=cfg.verbose)
+    history_new = download_list(args.url, pds, args.output_path, history_old,
+                                delay_between_tracks=cfg.delay_between_downloads, repeat_errors=args.repeat_errors,
+                                verbose=cfg.verbose)
 
     if args.to_mp3:
         tmp = [h for h in history_new.values() if h.status == "downloaded"]

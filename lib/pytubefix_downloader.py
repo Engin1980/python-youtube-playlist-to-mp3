@@ -1,16 +1,15 @@
 import datetime
+import re
 import time
-import os
+from enum import Enum
 from typing import Dict
+from typing import List
 
 # from pytube import Playlist, YouTube
 from pytubefix import Playlist, YouTube
 
-from lib.track_history import TrackHistory
-from enum import Enum
-from typing import List
 import lib.selenium_playlist_html_downloader as selenium_downloader
-import re
+from lib.track_history import TrackHistory
 
 __verbose = True
 
@@ -50,9 +49,43 @@ def __get_tracks_using_selenium(url: str):
     return ret
 
 
-def download(
+def download_video(
+        url: str, output: str, history_old: Dict[str, TrackHistory] | None = None, repeat_errors: bool = False,
+        verbose=True) -> Dict[str, TrackHistory]:
+    global __verbose
+    __verbose = verbose
+    history_new = {}
+    track_urls: List[str]
+
+    if history_old is None:
+        history_old = {}
+
+    if url in history_old.keys():
+        if repeat_errors and history_old[url].status.startswith("error:"):
+            __log(
+                f"\tVideo '{history_old[url].title}' already processed as '{history_old[url].status}' with an error, we will give it another try")
+        else:
+            __log(f"\tVideo '{history_old[url].title}' already processed as '{history_old[url].status}', skipping")
+            return history_old
+
+    try:
+        yt = YouTube(url)
+        try:
+            (out_file_name, stream_id, abr) = __process_video(yt, output)
+            history_new[url] = __create_history_record_success(yt, stream_id, abr, out_file_name)
+        except Exception as e:
+            __log("\tVideo " + url + " erroneous, will be not downloaded: " + e.__str__())
+            history_new[url] = __create_history_record_fail("Error when downloading stream.", e, yt=yt)
+    except Exception as e:
+        __log("\tVideo " + url + " erroneous, will be not downloaded: " + e.__str__())
+        history_new[url] = __create_history_record_fail("Unable to fetch from YouTube", e, yt=None)
+
+    return history_new
+
+
+def download_list(
         url: str, playlist_download_type: PlaylistDownloadType, output: str, history_old: Dict[str, TrackHistory], *,
-        delay_between_tracks: int = 10, repeat_errors: bool,
+        delay_between_tracks: int = 10, repeat_errors: bool = False,
         verbose: bool = True) -> Dict[str, TrackHistory]:
     global __verbose
     __verbose = verbose
