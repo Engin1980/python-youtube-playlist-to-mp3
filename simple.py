@@ -38,22 +38,23 @@ def __load_config():
 
 
 def main():
+    print("* * * Simple YouTube -> audio download * * *")
     print("This is a simple tool to download YouTube video/playlist to audio files.")
     print("It is only for demonstration purposes. "
           "For more detailed specification see the documentation and use 'main.py' file."
           "Note the max length of playlist in this simple demo is 99 files. For longer playlists "
           "you have to use the full version.")
 
-    url: str = input("Enter the URL of YouTube video/playlist:")
+    url: str = input("Enter the URL of YouTube video/playlist: ")
     is_playlist: bool = "list=?" in url
 
-    out_path: str = input("Enter the output directory (should be existing and empty):")
+    out_path: str = input("Enter the output directory (should be existing and empty): ")
     if os.path.exists(out_path) is False or os.path.isdir(out_path) is False:
         print(f"The path '{os.path.abspath(out_path)}' does not exist or is not a directory. Exiting.")
         return
 
     tmp = input(
-        "Convert .m4a output to MP3 (note you need to have ffmpeg installed and set up in config file): Y/n")
+        "Convert .m4a output to MP3 (note you need to have ffmpeg installed and set up in config file) - Y/n: ")
     to_mp3: bool = tmp.strip().lower() == "y"
     del tmp
 
@@ -76,6 +77,8 @@ def main():
         tmp = [h for h in history_new.values() if h.status == "downloaded"]
         tmp = [{"file": h.target_file, "title": h.title, "abr": h.abr} for h in tmp]
         webm2mp3.convert_webm_files_to_mp3(cfg.ffmpeg_exe, tmp)
+
+    print("Completed")
 
 
 if __name__ == "__main__":
