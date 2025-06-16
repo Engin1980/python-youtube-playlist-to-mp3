@@ -1,4 +1,4 @@
-# (Python) YouTube Playlist To MP3
+# 📹 ⇒ 🔊 (Python) YouTube Playlist To MP3
 
 ## Description
 
