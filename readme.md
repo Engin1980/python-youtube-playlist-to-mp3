@@ -27,6 +27,7 @@ the target computer. To adjust `.mp3` volume, MP3_GAIN must be available on the 
 
 | Date       | Note                                                                                             |
 |------------|--------------------------------------------------------------------------------------------------|
+| 2025-10-13 | Updated version of pytubefix to 10.0.0. Updated versions of other packages.
 | 2025-06-15 | Fixing bug in saving download history. Extending documentation.
 | 2025-05-27 | Support for long playlists (over 100 tracks) added. This must be enabled in the configuration. `config.json` configuration file introduced and startup arguments changed.
 | 2024-11-27 | PyTubeFix used as a replacement of PyTube package. Error in extracting file extensions is fixed. |

@@ -16,7 +16,7 @@ class Config:
     verbose: bool
 
 
-def __load_config():
+def __load_config(checkMp3GainFile: bool = False, checkFfmpegFile: bool = False):
     if not os.path.exists("config.json"):
         raise FileNotFoundError("Configuration file 'config.json' not found. "
                                 "Please create it with the required settings.")
@@ -26,9 +26,9 @@ def __load_config():
 
     ret: Config = Config(**data)
 
-    if not os.path.exists(ret.mp3gain_exe):
+    if checkMp3GainFile and not os.path.exists(ret.mp3gain_exe):
         raise FileNotFoundError(f"mp3gain executable not found: {ret.mp3gain_exe} ({os.path.abspath(ret.mp3gain_exe)})")
-    if not os.path.exists(ret.ffmpeg_exe):
+    if checkFfmpegFile and not os.path.exists(ret.ffmpeg_exe):
         raise FileNotFoundError(f"ffmpeg executable not found: {ret.ffmpeg_exe} ({os.path.abspath(ret.ffmpeg_exe)})")
     if ret.delay_between_downloads < 0:
         raise ValueError(f"Invalid delay value: {ret.delay_between_downloads}. "
