@@ -40,7 +40,7 @@ the target computer. To adjust `.mp3` volume, MP3_GAIN must be available on the 
 
 ## Requirements & Installation
 
-The script was tested on Python 3.13.2. 
+The script was tested on Python 3.14.0. 
 
 Additional required libraries are presented in `requirements.txt` file in the 
 repository.
@@ -50,7 +50,7 @@ To convert `*.webm` files to `*.mp3` files FFMPEG is required.
 To adjust volume of MP3 files, the command line version of _MP3 Gain_ must be installed.
 
 ### Instalation
-1. Ensure you have, or install [Python 3.1.2](https://www.python.org/downloads/) or newer.
+1. Ensure you have, or install [Python 3.14](https://www.python.org/downloads/) or newer.
 2. [To convert files to MP3] Ensure you have, or download and extract/install [FFMPEG](https://ffmpeg.org/download.html).
 3. [To adjust MP3 file volume] Ensure you have, or download and extract/install [MP3_GAIN](http://mp3gain.sourceforge.net/) (command line version is sufficient).   
 4. Download or clone this repository. Extract ZIP to the desired location.

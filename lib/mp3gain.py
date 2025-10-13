@@ -5,7 +5,7 @@ from typing import List
 
 
 def _read_arguments():
-    parser = argparse.ArgumentParser(description='The script to download audio tracks (webm) from YouTube playlist')
+    parser = argparse.ArgumentParser(description='The script to adjust track volume via mp3gain.')
     parser.add_argument("path",
                         help="Path to the local directory where the mp3 files are, or a single MP3 file.")
     parser.add_argument("--mp3gain-exe",
